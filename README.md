@@ -4,7 +4,7 @@
 ## Author:
 name:Mikołaj
 
-surname:Woźnaik
+surname:Woźniak
 
 group:4
 
