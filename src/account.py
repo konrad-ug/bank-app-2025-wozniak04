@@ -1,8 +1,40 @@
+from abc import ABC,abstractmethod
 class Account:
+    def __init__(self):
+        self.balance=0
+
+    def incoming_transfer(self,price):
+        if price<0:
+            return "price can't be negative"
+
+        self.balance+=price
+
+    def out_going_transfer(self,price):
+        if price<0:
+            return "transfer can't be negative"
+
+        if self.balance-price<0:
+            return "you don't have money for the transfer"
+       
+        self.balance-=price
+
+    def express_transfer(self,price):
+        if price<0:
+            return "transfer can't be negative"
+        if self.balance-price<0:
+            return "you don't have money for the transfer"
+        self.balance-=(price+self._get_express_cost())
+
+    @abstractmethod
+    def _get_express_cost(self):
+        pass
+
+class PersonalAccount(Account):
+
     def __init__(self, first_name, last_name,pesel,prom_code=None):
+        super().__init__()
         self.first_name = first_name
         self.last_name = last_name
-        self.balance=0
 
         if self.is_pesel_valid(pesel):
             self.pesel=pesel
@@ -38,5 +70,23 @@ class Account:
         else:
             year="19"+year_from_pesel
         return int(year)
+
+    def incoming_transfer(self,price):
+        if price<0:
+            return "price can't be negative"
+
+        self.balance+=price
+
+    def out_going_transfer(self,price):
+        if price<0:
+            return "transfer can't be negative"
+
+        if self.balance-price<0:
+            return "you don't have money for the transfer"
+       
+        self.balance-=price
+
+    def _get_express_cost(self):
+        return 1
 
 
