@@ -71,20 +71,7 @@ class PersonalAccount(Account):
             year="19"+year_from_pesel
         return int(year)
 
-    def incoming_transfer(self,price):
-        if price<0:
-            return "price can't be negative"
 
-        self.balance+=price
-
-    def out_going_transfer(self,price):
-        if price<0:
-            return "transfer can't be negative"
-
-        if self.balance-price<0:
-            return "you don't have money for the transfer"
-       
-        self.balance-=price
 
     def _get_express_cost(self):
         return 1
