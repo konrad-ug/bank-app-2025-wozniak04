@@ -39,4 +39,4 @@ jobs:
         python3 -m coverage run --source=src -m pytest
     - name: Show coverage report
       run: |
-        python3 -m coverage raport
+        python3 -m coverage report
