@@ -26,7 +26,7 @@ class Account:
         self.balance-=(price+self._get_express_cost())
 
     @abstractmethod
-    def _get_express_cost(self):
+    def _get_express_cost(self): # pragma: no cover
         pass
 
 class PersonalAccount(Account):

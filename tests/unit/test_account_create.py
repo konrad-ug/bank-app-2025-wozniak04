@@ -14,7 +14,7 @@ class TestAccount:
         account_not_to_get_prom_2 = PersonalAccount("davey2","santa2","04291203458","PRO_2sa")
         account_not_to_get_prom_3 = PersonalAccount("davey3","santa3","042912034581","PROM_2sa")
         account_not_to_get_prom_4 = PersonalAccount("davey3","santa3","04291203448")
-        account_not_to_get_prom_5 = PersonalAccount("davey3","santa3","042912034581","PROM_")
+        account_not_to_get_prom_5 = PersonalAccount("davey3","santa3","00830100011","PROM_")
         assert account_to_get_prom.balance == 50
         assert account_not_to_get_prom_1.balance == 0
         assert account_not_to_get_prom_2.balance == 0

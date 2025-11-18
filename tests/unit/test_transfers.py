@@ -14,7 +14,7 @@ class Test_transfers:
         assert account1.balance == 2500
         assert account2.balance == 1000
 
-    def test_outgoing_trasfer_normal(self):
+    def test_outgoing_trasfer_normal_peronal(self):
         account1 = PersonalAccount("Miki","wu","04291203458","PROM_abcd")
         account2 = PersonalAccount("davey","santa","04091267191","PROM_csa")
         account3 = PersonalAccount("davey3","santa3","04291203448")
@@ -45,7 +45,7 @@ class Test_transfers:
         assert account2.balance == 1000
 
         
-    def test_outgoing_trasfer_normal(self):
+    def test_outgoing_trasfer_normal_company(self):
         account1 = Company_Account("wieśbud","123")
         account2 = Company_Account("cos","2")
         account3 = Company_Account("a","12")
@@ -69,14 +69,18 @@ class Test_transfers:
         company2.balance=1000
         company3=Company_Account("wieśbud3","3")
         company3.balance=1000
+        company4=Company_Account("wieśbud4","4")
+        company4.balance=1000
 
         company1.express_transfer(100)
         company2.express_transfer(1000)
         company3.express_transfer(1001)
+        company4.express_transfer(-100)
         
         assert company1.balance == 895
         assert company2.balance == -5
         assert company3.balance == 1000
+        assert company4.balance == 1000
 
         account1 = PersonalAccount("Miki","wu","04291203458","PROM_abcd")
         account2 = PersonalAccount("davey","santa","04091267191","PROM_csa")
