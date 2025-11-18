@@ -1,13 +1,15 @@
-from abc import ABC,abstractmethod
+from abc import abstractmethod
 class Account:
     def __init__(self):
         self.balance=0
+        self.history=[]
 
     def incoming_transfer(self,price):
         if price<0:
             return "price can't be negative"
 
         self.balance+=price
+        self.history.append(price)
 
     def out_going_transfer(self,price):
         if price<0:
@@ -17,6 +19,7 @@ class Account:
             return "you don't have money for the transfer"
        
         self.balance-=price
+        self.history.append(-price)
 
     def express_transfer(self,price):
         if price<0:
@@ -24,69 +27,11 @@ class Account:
         if self.balance-price<0:
             return "you don't have money for the transfer"
         self.balance-=(price+self._get_express_cost())
+        self.history.append(-price) 
+        self.history.append(-self._get_express_cost())
 
     @abstractmethod
     def _get_express_cost(self): # pragma: no cover
         pass
-
-class PersonalAccount(Account):
-
-    def __init__(self, first_name, last_name,pesel,prom_code=None):
-        super().__init__()
-        self.first_name = first_name
-        self.last_name = last_name
-
-        if self.is_pesel_valid(pesel):
-            self.pesel=pesel
-        else:
-            self.pesel="invalid"
-        
-        
-        if self.valid_prom_code(prom_code):  
-            self.balance+=50
-
-    def is_pesel_valid(self,pesel):
-         return len(pesel) == 11
-
-    def valid_prom_code(self,prom_code):
-        if self.pesel == "invalid":
-            return False
-        if prom_code is None:
-            return False
-        if "PROM_" in prom_code and self.get_birth_year_from_pesel(self.pesel)>1960 and len(prom_code)>5:
-            return True
-        return False
-        
-        
-    def get_birth_year_from_pesel(self,pesel):
-        year=""
-        year_from_pesel=pesel[0:2]
-        month_with_centaury=pesel[2:4]
-        if int(month_with_centaury)>12:
-            if int(month_with_centaury)>32:
-                year="18"+year_from_pesel
-            else:
-                year="20"+year_from_pesel
-        else:
-            year="19"+year_from_pesel
-        return int(year)
-
-    def incoming_transfer(self,price):
-        if price<0:
-            return "price can't be negative"
-
-        self.balance+=price
-
-    def out_going_transfer(self,price):
-        if price<0:
-            return "transfer can't be negative"
-
-        if self.balance-price<0:
-            return "you don't have money for the transfer"
-       
-        self.balance-=price
-
-    def _get_express_cost(self):
-        return 1
 
 
