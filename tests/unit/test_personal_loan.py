@@ -4,7 +4,6 @@ from src.personal_account import PersonalAccount
 
 @pytest.fixture
 def personal_account():
-    """Fixture creating a fresh PersonalAccount for each test"""
     account = PersonalAccount("Miki", "wu", "04291203458", "PROM_abcd")
     return account
 
@@ -54,19 +53,19 @@ class TestAccount:
             1000 + 100 - 50 + 30 + 20 - 10 + 80
         )
     ])
-    def test_submit_for_loan(self, transfers, loan_amount, expected_result, expected_balance):
-        """Parametrized test for submit_for_loan functionality"""
-        account = PersonalAccount("Miki", "wu", "04291203458", "PROM_abcd")
-        account.balance = 1000
+    def test_submit_for_loan(self,personal_account, transfers, loan_amount, expected_result, expected_balance):
+        """Parametrized test for submit_for_loan in personal account functionality"""
+        
+        personal_account.balance = 1000
 
-        # Execute transfers based on type
+        
         for transfer_type, amount in transfers:
             if transfer_type == "incoming":
-                account.incoming_transfer(amount)
+                personal_account.incoming_transfer(amount)
             elif transfer_type == "outgoing":
-                account.out_going_transfer(amount)
+                personal_account.out_going_transfer(amount)
 
-        result = account.submit_for_loan(loan_amount)
+        result = personal_account.submit_for_loan(loan_amount)
 
         assert result is expected_result
-        assert account.balance == expected_balance
+        assert personal_account.balance == expected_balance
