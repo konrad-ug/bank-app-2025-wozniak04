@@ -5,7 +5,7 @@ class TestApiCrud:
 
     @pytest.fixture(scope="function",autouse=True)
     def set_up(self):
-        
+        None
     def test_create_account(self):
         
         account_data={
