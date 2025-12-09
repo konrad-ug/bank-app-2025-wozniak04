@@ -9,7 +9,9 @@ registry = AccountRegister()
 def create_account():
     data = request.get_json()
     print(f"Create account request: {data}")
-
+    if registry.search_account_by_pesel(data["pesel"]) is not None:
+        return jsonify({"message": "Account with that pesel already exists"}), 409
+    
     account = PersonalAccount(data["name"], data["surname"], data["pesel"])
     registry.register_personal_account(account)
     return jsonify({"message": "Account created"}), 201
@@ -61,5 +63,46 @@ def delete_account(pesel):
     all_accounts=registry.get_all_accounts()
 
     all_accounts=[a for a in all_accounts if a.pesel != pesel]
-
+    registry.accounts=all_accounts
     return jsonify({"message": "Account deleted"}), 200
+
+@app.route("/api/accounts/<pesel>/transfer", methods=['POST'])
+def transfer_funds(pesel):
+    data = request.get_json()
+    amount = data["amount"]
+    transfer_type = data["type"]
+
+    account = registry.search_account_by_pesel(pesel)
+    if account is None:
+        return jsonify({"message": "Account not found"}), 404
+
+    success = False
+
+    match transfer_type:
+        case "incoming":
+            
+            success = account.incoming_transfer(amount)
+        
+        case "outgoing":
+            
+            success = account.out_going_transfer(amount)
+        
+        case "express":
+            
+            success = account.express_transfer(amount)
+            
+        case _: 
+            return jsonify({
+                "message": f"Nieznany typ przelewu: {transfer_type}. Obsługiwane typy: incoming, outgoing, express."
+            }), 400 
+
+   
+    if success is None:
+        return jsonify({"message": "Zlecenie przyjęto do realizacji"}), 200
+    else:
+       
+        if transfer_type == "outgoing" or transfer_type == "express":
+             return jsonify({"message": "Transakcja nieudana. Niewystarczające środki lub błąd wewnętrzny."}), 422
+       
+        return jsonify({"message": "Transakcja nieudana. Błąd wewnętrzny."}), 500
+    
