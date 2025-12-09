@@ -1,6 +1,5 @@
 import pytest
 from src.account_register import AccountRegister
-
 from src.personal_account import PersonalAccount 
 
 @pytest.fixture
