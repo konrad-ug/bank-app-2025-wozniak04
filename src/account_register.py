@@ -4,8 +4,7 @@ class AccountRegister:
     def __init__(self):
         self.accounts = []
 
-    def register_personal_account(self, first_name, last_name, pesel, prom_code=None):
-        account = PersonalAccount(first_name, last_name, pesel, prom_code)
+    def register_personal_account(self,account):
         self.accounts.append(account)
         return account
     
