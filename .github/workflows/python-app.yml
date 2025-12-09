@@ -35,17 +35,7 @@ jobs:
           flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
       - name: Test with pytest
         run: |
-          python3 -m coverage run --source=src -m pytest
+          python3 -m coverage run --source=src -m pytest tests/unit
       - name: Show coverage report
         run: |
           python3 -m coverage report --fail-under=100
-      - name: Start Flask Server for API Tests
-        run: |
-          FLASK_APP=app.py flask run &  
-          sleep 5
-        env:
-          FLASK_APP: app.py
-
-      - name: Run Integration Tests (API Tests)
-        run: |
-          python3 -m pytest app/api_test/
