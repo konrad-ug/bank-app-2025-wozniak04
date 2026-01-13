@@ -1,12 +1,12 @@
 import pytest
-from src.personal_account import PersonalAccount
+from src.personal_account import Personal_Account
 from src.company_account import Company_Account
 
 
 @pytest.fixture
 def personal_account_1():
     """Fixture for first personal account"""
-    account = PersonalAccount("Miki", "wu", "04291203458", "PROM_abcd")
+    account = Personal_Account("Miki", "wu", "04291203458", "PROM_abcd")
     account.balance = 1000
     return account
 
@@ -14,7 +14,7 @@ def personal_account_1():
 @pytest.fixture
 def personal_account_2():
     """Fixture for second personal account"""
-    account = PersonalAccount("davey", "santa", "04091267191", "PROM_csa")
+    account = Personal_Account("davey", "santa", "04091267191", "PROM_csa")
     account.balance = 1000
     return account
 
@@ -22,7 +22,7 @@ def personal_account_2():
 @pytest.fixture
 def personal_account_3():
     """Fixture for third personal account"""
-    account = PersonalAccount("davey3", "santa3", "04291203448")
+    account = Personal_Account("davey3", "santa3", "04291203448")
     account.balance = 1000
     return account
 
@@ -64,9 +64,9 @@ def company_accounts_for_express(mocker):
 def personal_accounts_for_express():
     """Fixture for multiple personal accounts for express transfer testing"""
     accounts = [
-        PersonalAccount("Miki", "wu", "04291203458", "PROM_abcd"),
-        PersonalAccount("davey", "santa", "04091267191", "PROM_csa"),
-        PersonalAccount("davey", "santa", "04091267191", "PROM_csa"),
+        Personal_Account("Miki", "wu", "04291203458", "PROM_abcd"),
+        Personal_Account("davey", "santa", "04091267191", "PROM_csa"),
+        Personal_Account("davey", "santa", "04091267191", "PROM_csa"),
     ]
     for account in accounts:
         account.balance = 1000
@@ -89,7 +89,7 @@ class Test_transfers:
 
     @pytest.mark.parametrize("transfer_amount,expected_balance", [
         (500, 500),      # Normal transfer
-        (-100, 1000),    # Negative transfer (should be rejected)
+        (-100, 1000),    # Negative transfer 
         (1001, 1000),    # Transfer exceeding balance
     ])
     def test_outgoing_transfer_personal(self, personal_account_1, personal_account_2, 
@@ -115,7 +115,7 @@ class Test_transfers:
 
     @pytest.mark.parametrize("transfer_amount,expected_balance_1,expected_balance_2", [
         (1500, 2500, 1000),  # Normal positive transfer
-        (-500, 1000, 1000),  # Negative transfer (should be rejected)
+        (-500, 1000, 1000),  # Negative transfer 
     ])
     def test_incoming_transfer_company(self, company_account_1, company_account_2,
                                       transfer_amount, expected_balance_1, expected_balance_2):

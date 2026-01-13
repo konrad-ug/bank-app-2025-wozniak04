@@ -1,5 +1,5 @@
 from src.account import Account
-class PersonalAccount(Account):
+class Personal_Account(Account):
 
     def __init__(self, first_name, last_name,pesel,prom_code=None):
         super().__init__()

@@ -1,10 +1,10 @@
 import pytest
-from src.personal_account import PersonalAccount
+from src.personal_account import Personal_Account
 
 
 @pytest.fixture
 def personal_account():
-    account = PersonalAccount("Miki", "wu", "04291203458", "PROM_abcd")
+    account = Personal_Account("Miki", "wu", "04291203458", "PROM_abcd")
     return account
 
 
