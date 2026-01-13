@@ -2,7 +2,9 @@ import pytest
 from src.company_account import Company_Account 
 
 @pytest.fixture
-def company_account():
+def company_account(mocker):
+    
+    mocker.patch('src.company_account.Company_Account._is_vatstatus_active', return_value=True)
     
     account = Company_Account("Januszex Sp. z o.o.", "1234567890")
     return account
@@ -33,11 +35,7 @@ class TestCompanyAccount:
         (2000, [-1774, -1776], 500, False)
     ])
     def test_submit_for_loan(self, company_account, balance, history, loan_amount, expected_result):
-        """
-        Tests company loan logic:
-        1. Loan amount * 2 <= balance
-        2. History must contain a transfer of -1775 (ZUS / Social Security)
-        """
+    
         
         
         company_account.balance = balance

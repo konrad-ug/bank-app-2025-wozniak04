@@ -28,24 +28,27 @@ def personal_account_3():
 
 
 @pytest.fixture
-def company_account_1():
+def company_account_1(mocker):
     """Fixture for first company account"""
+    mocker.patch('src.company_account.Company_Account._is_vatstatus_active', return_value=True)
     account = Company_Account("wieśbud", "1234567890")
     account.balance = 1000
     return account
 
 
 @pytest.fixture
-def company_account_2():
+def company_account_2(mocker):
     """Fixture for second company account"""
+    mocker.patch('src.company_account.Company_Account._is_vatstatus_active', return_value=True)
     account = Company_Account("amazon", "0987654321")
     account.balance = 1000
     return account
 
 
 @pytest.fixture
-def company_accounts_for_express():
+def company_accounts_for_express(mocker):
     """Fixture for multiple company accounts for express transfer testing"""
+    mocker.patch('src.company_account.Company_Account._is_vatstatus_active', return_value=True)
     companies = [
         Company_Account("wieśbud", "1"),
         Company_Account("wieśbud2", "2"),
