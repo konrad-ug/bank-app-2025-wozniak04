@@ -1,8 +1,7 @@
 import pytest
 from src.account_register import AccountRegister
-from src.personal_account import PersonalAccount 
+from src.personal_account import Personal_Account 
 
-from src.personal_account import PersonalAccount 
 
 @pytest.fixture
 def register():
@@ -38,7 +37,7 @@ class TestAccountRegister:
        
         for first_name, last_name, pesel in users_to_add:
             
-            account = PersonalAccount(first_name, last_name, pesel)
+            account = Personal_Account(first_name, last_name, pesel)
             register.register_personal_account(account)
 
         
@@ -63,7 +62,7 @@ class TestAccountRegister:
         
         for first_name, last_name, pesel in users_to_add:
             
-            account = PersonalAccount(first_name, last_name, pesel)
+            account = Personal_Account(first_name, last_name, pesel)
             register.register_personal_account(account)
             
         assert register.number_of_accounts() == expected_count
@@ -85,7 +84,7 @@ class TestAccountRegister:
         
         for first_name, last_name, pesel in users_to_add:
             
-            account = PersonalAccount(first_name, last_name, pesel)
+            account = Personal_Account(first_name, last_name, pesel)
             register.register_personal_account(account)
         
         

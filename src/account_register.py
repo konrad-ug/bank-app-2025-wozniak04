@@ -1,4 +1,4 @@
-from src.personal_account import PersonalAccount
+from src.personal_account import Personal_Account
 
 class AccountRegister:
     def __init__(self):
@@ -10,7 +10,7 @@ class AccountRegister:
     
     def search_account_by_pesel(self, pesel):
         for account in self.accounts:
-            if isinstance(account, PersonalAccount) and account.pesel == pesel:
+            if isinstance(account, Personal_Account) and account.pesel == pesel:
                 return account
         return None
     def get_all_accounts(self):
