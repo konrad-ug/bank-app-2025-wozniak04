@@ -1,6 +1,6 @@
 from flask import Flask,request,jsonify
 from src.account_register import AccountRegister
-from src.personal_account import PersonalAccount
+from src.personal_account import Personal_Account
 
 app = Flask(__name__)
 
@@ -12,7 +12,7 @@ def create_account():
     if registry.search_account_by_pesel(data["pesel"]) is not None:
         return jsonify({"message": "Account with that pesel already exists"}), 409
     
-    account = PersonalAccount(data["name"], data["surname"], data["pesel"])
+    account = Personal_Account(data["name"], data["surname"], data["pesel"])
     registry.register_personal_account(account)
     return jsonify({"message": "Account created"}), 201
 
