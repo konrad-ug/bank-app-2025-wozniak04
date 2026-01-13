@@ -58,7 +58,7 @@ class TestAccountRegister:
         ([("Jan", "K", "1"), ("Anna", "N", "2")], 2),  
     ])
     def test_number_of_accounts(self, register, users_to_add, expected_count):
-        """Sprawdza czy licznik kont działa poprawnie"""
+        
         
         
         for first_name, last_name, pesel in users_to_add:
@@ -78,11 +78,11 @@ class TestAccountRegister:
         ),
     ])
     def test_get_all_accounts(self, register, users_to_add, expected_accounts_data):
-        """
-        Checks if the get_all_accounts method returns the correct list of registered account objects.
-        """
         
-        # ARRANGE - Register accounts
+        #Checks if the get_all_accounts method returns the correct list of registered account objects.
+        
+        
+        
         for first_name, last_name, pesel in users_to_add:
             
             account = PersonalAccount(first_name, last_name, pesel)

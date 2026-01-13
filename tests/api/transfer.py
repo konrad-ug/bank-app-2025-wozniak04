@@ -110,7 +110,7 @@ class TestApiTransfer:
 
     
     def test_transfer_outgoing_insufficient_funds(self, create_account_with_balance):
-        """ Sprawdza 422, gdy saldo jest niewystarczające. """
+        
         pesel = create_account_with_balance 
         transfer_data = {"amount": 1500, "type": "outgoing"} 
         
