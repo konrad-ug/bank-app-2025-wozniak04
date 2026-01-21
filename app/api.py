@@ -1,10 +1,12 @@
 from flask import Flask,request,jsonify
 from src.account_register import AccountRegister
 from src.personal_account import Personal_Account
+from src.mongoAccountsRepository import MongoAccountsRepository
 
 app = Flask(__name__)
 
 registry = AccountRegister()
+database=MongoAccountsRepository()
 @app.route("/api/accounts", methods=['POST'])
 def create_account():
     data = request.get_json()
@@ -94,7 +96,7 @@ def transfer_funds(pesel):
         case _: 
             return jsonify({
                 "message": f"Nieznany typ przelewu: {transfer_type}. Obsługiwane typy: incoming, outgoing, express."
-            }), 400 
+            }), 400 #
 
    
     if success is None:
@@ -105,4 +107,29 @@ def transfer_funds(pesel):
              return jsonify({"message": "Transakcja nieudana. Niewystarczające środki lub błąd wewnętrzny."}), 422
        
         return jsonify({"message": "Transakcja nieudana. Błąd wewnętrzny."}), 500
-    
+
+@app.route("/api/accounts/save", methods=['POST'])
+def save_accounts():
+    try:
+        database.save_all(registry.get_all_accounts())
+        return jsonify({"message": "sukces"}), 200
+
+    except Exception as e: 
+        print(f"Błąd zapisu: {e}")
+        return jsonify({"message": "błąd podczas zapisu do bazy"}), 500
+
+@app.route("/api/accounts/load", methods=['POST'])
+def load_accounts():
+    try:
+        accounts_from_db = database.load_all()
+        
+        registry.accounts = accounts_from_db
+        
+        for acc in accounts_from_db:
+            if "_id" in acc:
+                acc["_id"] = str(acc["_id"])
+
+        return jsonify({"message": "sukces", "konta": accounts_from_db}), 200
+    except Exception as e: 
+        print(f"Błąd odczytu: {e}")
+        return jsonify({"message": "błąd podczas odczytu z bazy danych"}), 500

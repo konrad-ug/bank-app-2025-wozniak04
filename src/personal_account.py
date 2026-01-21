@@ -68,4 +68,12 @@ class Personal_Account(Account):
             return True
 
         return False
+    def to_dict(self):
+        return {
+            "name":self.first_name,
+            "surname":self.last_name,
+            "pesel":self.pesel,
+            "balance":self.balance,
+            "history":self.history
+        }
         
