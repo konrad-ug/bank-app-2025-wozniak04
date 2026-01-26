@@ -71,7 +71,7 @@ class TestApiCrud:
         new_name = "jacek"
         new_surname = "nowak"
         update_data = {
-            "first_name": new_name,
+            "name": new_name,
             "surname": new_surname
         }
         
@@ -91,7 +91,7 @@ class TestApiCrud:
 
     def test_update_account_not_found(self):
         
-        update_data = {"first_name": "New Name"}
+        update_data = {"name": "New Name"}
         response = requests.patch(f"{self.url}accounts/{self.NON_EXISTENT_PESEL}", json=update_data)
         assert response.status_code == 404
         assert response.json()["message"] == "did not found account with that pesel"

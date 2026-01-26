@@ -25,17 +25,17 @@ def check_count(context, count):
 
 @step('Account with pesel "{pesel}" exists in registry')
 def check_exists(context, pesel):
-    r = requests.get(f"{URL}/api/accounts/{str(pesel).strip('"')}")
+    r = requests.get(f"{URL}/api/accounts/{pesel}")
     assert r.status_code == 200
 
 @step('Account with pesel "{pesel}" does not exist in registry')
 def check_not_exists(context, pesel):
-    r = requests.get(f"{URL}/api/accounts/{str(pesel).strip('"')}")
+    r = requests.get(f"{URL}/api/accounts/{pesel}")
     assert r.status_code == 404
 
 @when('I delete account with pesel: "{pesel}"')
 def delete_acc(context, pesel):
-    r = requests.delete(f"{URL}/api/accounts/{str(pesel).strip('"')}")
+    r = requests.delete(f"{URL}/api/accounts/{pesel}")
     assert r.status_code == 200
 
 @when('I update "{field}" of account with pesel: "{pesel}" to "{value}"')
@@ -51,6 +51,6 @@ def check_field(context, pesel, field, value):
     r = requests.get(f"{URL}/api/accounts/{pesel}")
     assert r.status_code == 200
     data = r.json()
-    if field not in ["name", "surname"]:
+    if field not in ["name", "surname","balance"]:
         raise ValueError(f"Invalid field: {field}. Must be 'name' or 'surname'.")
     assert str(data[field]) == str(value)

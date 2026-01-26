@@ -16,6 +16,7 @@ def create_account():
     
     account = Personal_Account(data["name"], data["surname"], data["pesel"])
     registry.register_personal_account(account)
+    print(registry.get_all_accounts())
     return jsonify({"message": "Account created"}), 201
 
 @app.route("/api/accounts", methods=['GET'])
@@ -49,8 +50,8 @@ def update_account(pesel):
     if account is None:
         return jsonify({"message": "did not found account with that pesel"}), 404
 
-    if "first_name" in data:
-        account.first_name=data["first_name"]
+    if "name" in data:
+        account.first_name=data["name"]
 
     if "surname" in data:
         account.last_name=data["surname"]
@@ -59,13 +60,15 @@ def update_account(pesel):
 
 @app.route("/api/accounts/<pesel>", methods=['DELETE'])
 def delete_account(pesel):
-    account=registry.search_account_by_pesel(pesel)
+    account = registry.search_account_by_pesel(pesel)
     if account is None:
         return jsonify({"message": "Account not found"}), 404
-    all_accounts=registry.get_all_accounts()
-
-    all_accounts=[a for a in all_accounts if a.pesel != pesel]
-    registry.accounts=all_accounts
+    
+    registry.accounts = [
+        a for a in registry.accounts 
+        if (getattr(a, 'pesel', None) if not isinstance(a, dict) else a.get('pesel')) != pesel
+    ]
+    
     return jsonify({"message": "Account deleted"}), 200
 
 @app.route("/api/accounts/<pesel>/transfer", methods=['POST'])
