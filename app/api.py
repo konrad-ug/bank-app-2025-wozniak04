@@ -1,10 +1,12 @@
 from flask import Flask,request,jsonify
 from src.account_register import AccountRegister
 from src.personal_account import Personal_Account
+from src.mongoAccountsRepository import MongoAccountsRepository
 
 app = Flask(__name__)
 
 registry = AccountRegister()
+database=MongoAccountsRepository()
 @app.route("/api/accounts", methods=['POST'])
 def create_account():
     data = request.get_json()
@@ -14,6 +16,7 @@ def create_account():
     
     account = Personal_Account(data["name"], data["surname"], data["pesel"])
     registry.register_personal_account(account)
+    print(registry.get_all_accounts())
     return jsonify({"message": "Account created"}), 201
 
 @app.route("/api/accounts", methods=['GET'])
@@ -47,8 +50,8 @@ def update_account(pesel):
     if account is None:
         return jsonify({"message": "did not found account with that pesel"}), 404
 
-    if "first_name" in data:
-        account.first_name=data["first_name"]
+    if "name" in data:
+        account.first_name=data["name"]
 
     if "surname" in data:
         account.last_name=data["surname"]
@@ -57,13 +60,15 @@ def update_account(pesel):
 
 @app.route("/api/accounts/<pesel>", methods=['DELETE'])
 def delete_account(pesel):
-    account=registry.search_account_by_pesel(pesel)
+    account = registry.search_account_by_pesel(pesel)
     if account is None:
         return jsonify({"message": "Account not found"}), 404
-    all_accounts=registry.get_all_accounts()
-
-    all_accounts=[a for a in all_accounts if a.pesel != pesel]
-    registry.accounts=all_accounts
+    
+    registry.accounts = [
+        a for a in registry.accounts 
+        if (getattr(a, 'pesel', None) if not isinstance(a, dict) else a.get('pesel')) != pesel
+    ]
+    
     return jsonify({"message": "Account deleted"}), 200
 
 @app.route("/api/accounts/<pesel>/transfer", methods=['POST'])
@@ -94,7 +99,7 @@ def transfer_funds(pesel):
         case _: 
             return jsonify({
                 "message": f"Nieznany typ przelewu: {transfer_type}. Obsługiwane typy: incoming, outgoing, express."
-            }), 400 
+            }), 400 #
 
    
     if success is None:
@@ -105,4 +110,29 @@ def transfer_funds(pesel):
              return jsonify({"message": "Transakcja nieudana. Niewystarczające środki lub błąd wewnętrzny."}), 422
        
         return jsonify({"message": "Transakcja nieudana. Błąd wewnętrzny."}), 500
-    
+
+@app.route("/api/accounts/save", methods=['POST'])
+def save_accounts():
+    try:
+        database.save_all(registry.get_all_accounts())
+        return jsonify({"message": "sukces"}), 200
+
+    except Exception as e: 
+        print(f"Błąd zapisu: {e}")
+        return jsonify({"message": "błąd podczas zapisu do bazy"}), 500
+
+@app.route("/api/accounts/load", methods=['POST'])
+def load_accounts():
+    try:
+        accounts_from_db = database.load_all()
+        
+        registry.accounts = accounts_from_db
+        
+        for acc in accounts_from_db:
+            if "_id" in acc:
+                acc["_id"] = str(acc["_id"])
+
+        return jsonify({"message": "sukces", "konta": accounts_from_db}), 200
+    except Exception as e: 
+        print(f"Błąd odczytu: {e}")
+        return jsonify({"message": "błąd podczas odczytu z bazy danych"}), 500

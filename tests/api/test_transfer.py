@@ -9,11 +9,9 @@ class TestApiTransfer:
     TRANSFER_AMOUNT = 500
 
     @pytest.fixture(scope="function", autouse=True)
-    def set_up_teardown(self):
-         
-        yield
-        
+    def set_up_teardown(self):        
         requests.delete(f"{self.url}accounts/{self.TEST_PESEL}")
+        yield
 
     @pytest.fixture(scope="function")
     def create_account_with_balance(self):
