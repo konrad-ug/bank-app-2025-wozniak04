@@ -6,12 +6,12 @@ class MongoAccountsRepository(AccountsRepository):
         if collection is not None:
             self._collection=collection
             return
-        mongo_url=mongo_url or os.getenv("MONGO_URL","mongodb://localhost:27017")
-        db_name=db_name or os.getenv("MONGO_DB","bank_app")
-        collection_name=collection_name or os.getenv("MONGO_COLLECTION","accounts")
-        client=MongoClient(mongo_url)
-        db=client[db_name]
-        self._collection=db[collection_name]
+        mongo_url=mongo_url or os.getenv("MONGO_URL","mongodb://localhost:27017") # pragma: no cover
+        db_name=db_name or os.getenv("MONGO_DB","bank_app") # pragma: no cover
+        collection_name=collection_name or os.getenv("MONGO_COLLECTION","accounts") # pragma: no cover
+        client=MongoClient(mongo_url) # pragma: no cover
+        db=client[db_name] # pragma: no cover
+        self._collection=db[collection_name] # pragma: no cover
 
 
     def save_all(self,accounts):
