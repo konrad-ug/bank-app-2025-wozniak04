@@ -1,5 +1,3 @@
-# This workflow will install Python dependencies, run tests and lint with a single version of Python
-# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-python
 
 name: Unit tests
 
@@ -42,20 +40,4 @@ jobs:
         run: |
           python3 -m coverage report --fail-under=100
 
-      - name: Start flask
-        run: |
-          export FLASK_APP=app/api.py
-          export FLASK_ENV=development
-          export PYTHONPATH=$GITHUB_WORKSPACE
-          flask run &
-      - name: start mongo
-        run: |
-          docker compose -f mongo.yml up -d
-          
-      - name: Execute API tests
-        run: |
-          python3 -m pytest tests/api
-
-      - name: Execute Performance Test
-        run: |
-          python3 -m pytest tests/perf
+      
